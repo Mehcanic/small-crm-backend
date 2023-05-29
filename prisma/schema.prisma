@@ -1,0 +1,94 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// TODO specify schema 
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  user_id       Int      @id
+  first_name    String
+  last_name     String
+  email         String
+  phone         String
+  password      String
+  industry      String
+  created_at    DateTime @default(now())
+
+  customers     Customer[]
+  properties    Property[]
+  orders        Order[]
+}
+
+model Customer {
+  customer_id       Int      @id
+  user_id           Int
+  first_name        String
+  last_name         String
+  email             String
+  phone             String
+  billing_address   String
+  shipping_address  String
+
+  user              User     @relation(fields: [user_id], references: [user_id])
+  properties        Property[]
+  orders            Order[]
+}
+
+model Property {
+  property_id       Int      @id
+  customer_id       Int
+  user_id           Int
+  property_type     String
+  property_details  String
+  created_at        DateTime @default(now())
+
+  customer          Customer @relation(fields: [customer_id], references: [customer_id])
+  user              User     @relation(fields: [user_id], references: [user_id])
+  propertyCustomFields PropertyCustomField[]
+}
+
+model PropertyCustomField {
+  field_id      Int      @id
+  property_id   Int
+  field_name    String
+  field_value   String
+  created_at    DateTime @default(now())
+
+  property      Property @relation(fields: [property_id], references: [property_id])
+}
+
+model Order {
+  job_id               Int      @id
+  customer_id          Int
+  user_id              Int
+  job_name             String
+  description          String
+  status               String
+  start_date           DateTime?
+  estimated_end_date   DateTime?
+  end_date             DateTime?
+  created_at           DateTime @default(now())
+
+  customer             Customer @relation(fields: [customer_id], references: [customer_id])
+  user                 User     @relation(fields: [user_id], references: [user_id])
+  orderCustomFields    OrderCustomField[]
+}
+
+model OrderCustomField {
+  field_id        Int      @id
+  job_id          Int
+  field_name      String
+  field_value     String
+  created_at      DateTime @default(now())
+
+  job             Order    @relation(fields: [job_id], references: [job_id])
+}
+

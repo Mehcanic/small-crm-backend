@@ -1,0 +1,12 @@
+
+# In config/server.ts, you will set up your express server. Here you will import all your routes and apply them as middleware
+
+## In config/database.ts, set up your Prisma client for PostgreSQL
+
+## In models/*, define your Prisma models that correspond to your database schema
+
+## In routes/*, define your Express routes
+
+## In controllers/*, define your Express controllers. They will use the services to get the data they need and send that data in the HTTP response
+
+## In services/*, define your services. They will use the Prisma client to interact with your PostgreSQL database.
